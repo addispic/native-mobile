@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
+import {formatDistanceToNow} from 'date-fns'
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, FlatList } from 'react-native'
 import {MaterialIcons, FontAwesome, Entypo, AntDesign} from '@expo/vector-icons'
 
 // slices
 // notes 
-import {notesSelector,getAllNotes} from '../features/notesSlice'
+import {notesSelector,getAllNotes, addNewNote, deleteNote} from '../features/notesSlice'
 
 
 const Home = () => {
@@ -25,21 +26,17 @@ const Home = () => {
       <View style={styles.noteItem}>
         {/* text */}
         <View>
-          <Text>
-            Menilek’s father was Haile Malakot, later negus (king) of Shewa. His
-            mother was a court servant who married Haile Malakot shortly after
-            Sahle Mariam was born. His forefathers had been rulers of Menz, the
-            heartland of Shewa, since the 17th century, and it has been claimed
-            that further back they were related to the Solomonid line of
-            emperors who ruled Ethiopia between 1268 and 1854 (alternate dates
-            1270–1855).
+          <Text selectable>
+            {item.text}
           </Text>
         </View>
         {/* footer */}
         <View style={styles.footer}>
           <Entypo name='clock' size={14} color={'green'}/>
-          <Text style={{fontSize: 10, color: 'green'}}>3 minutes ago</Text>
-          <TouchableOpacity style={{marginLeft: 12}}>
+          {/* <Text style={{fontSize: 10, color: 'green'}}>{formatDistanceToNow(new Date(item.createdAt),{addSuffix: true})}</Text> */}
+          <TouchableOpacity onPress={()=>{
+            dispatch(deleteNote(item._id))
+          }} style={{marginLeft: 12}}>
             <AntDesign name='delete' size={16} color={'red'} />
           </TouchableOpacity>
         </View>
@@ -50,7 +47,7 @@ const Home = () => {
   // add new note handler
   const addNewNoteHandler = () => {
     if(text.trim()){
-      console.log({text})
+      dispatch(addNewNote({text}))
     }
     setText("")
   }

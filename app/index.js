@@ -1,6 +1,6 @@
 import React, {useState, useEffect,useRef} from 'react'
 import {useSelector,useDispatch} from 'react-redux'
-import { StyleSheet, Text, View,TouchableOpacity, TextInput, FlatList } from 'react-native'
+import { StyleSheet, Text, View,TouchableOpacity, TextInput, FlatList , ScrollView} from 'react-native'
 import {MaterialIcons, FontAwesome,Entypo} from '@expo/vector-icons'
 
 // config
@@ -48,10 +48,6 @@ const Home = () => {
     })
   },[])
 
-  // scroll to bottom
-  useEffect(()=>{
-    // bottomReference?.current.scrollIntoView({behavior: 'smooth'})
-  },[notes])
 
   // add new text
   const addNewTextHandler = () => {
@@ -61,14 +57,25 @@ const Home = () => {
     setText("")
   }
 
-  // render note
-  const renderNote = ({item}) => {
-    return (
-      <View style={styles.noteContainer}>
+  // scroll to end
+  useEffect(()=>{
+    bottomReference.current.scrollToEnd({animated: true})
+  },[notes])
+
+
+  return (
+    <View style={styles.container}>
+      {/* notes */}
+      <View style={styles.noteList}>
+     <ScrollView ref={bottomReference} showsVerticalScrollIndicator={false}>
+      {
+        notes.map((noteItem)=>{
+          return (
+            <View key={noteItem._id} style={styles.noteContainer}>
         {/* text */}
         <View style={styles.noteText}>
           <Text>
-          {item.text}
+          {noteItem.text}
           </Text>
         </View>
         {/* footer */}
@@ -76,22 +83,17 @@ const Home = () => {
           <Entypo name='clock' size={18} color={'green'} />
           <Text style={{fontSize: 10, color: 'green'}}>3 minutes ago</Text>
           <TouchableOpacity onPress={()=>{
-            dispatch(deleteNote(item._id))
+            dispatch(deleteNote(noteItem._id))
           }}>
             <Text style={{marginLeft: 12, fontSize: 12, color: 'red'}}>delete</Text>
           </TouchableOpacity>
         </View>
       </View>
-    )
-  }
-
-  return (
-    <View style={styles.container}>
-      {/* notes */}
-      <View style={styles.noteList}>
-      <FlatList showsVerticalScrollIndicator={false} data={notes} key={(item) =>item._id} renderItem={renderNote}/>
+          )
+        })
+      }
+     </ScrollView>
       </View>
-      <View ref={bottomReference}/>
       {/* add new */}
       <View style={styles.addNewNote}>
         {/* file picker */}

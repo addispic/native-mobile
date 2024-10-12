@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, StatusBar } from 'react-native'
-import {MaterialCommunityIcons} from '@expo/vector-icons'
+import { Link } from 'expo-router'
+import {MaterialCommunityIcons, AntDesign} from '@expo/vector-icons'
 
 const Header = () => {
   return (
@@ -9,11 +10,15 @@ const Header = () => {
       <View style={styles.headerContent}>
         {/* left */}
         <View>
+          <Link href={"/"}>
             <MaterialCommunityIcons name='book-open-page-variant' size={24} color={"#e3e3e3"} />
+          </Link>
         </View>
         {/* right */}
         <View>
-            <Text style={styles.counter}>3 total</Text>
+            <Link href={"/profile"}>
+            <AntDesign name='user' size={24} color={"#e3e3e3"} />
+            </Link>
         </View>
       </View>
     </View>

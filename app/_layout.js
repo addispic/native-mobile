@@ -19,9 +19,11 @@ const RootLayout = () => {
     <View style={styles.container}>
       <Header />
       <Stack screenOptions={{
-        headerShown: false
+        headerShown: false,
+        animation: 'none'
       }}>
         <Stack.Screen name='index' options={{}} />
+        <Stack.Screen name='profile' options={{}} />
       </Stack>
     </View>
     </Provider>
